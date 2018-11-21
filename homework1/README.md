@@ -10,7 +10,7 @@
 + Robin Kim ([강사](https://github.com/napi0182))
 - - -
 **2조 총원 4명**
-+ 김재성 ([조장] https://github.com/CuteIU))
++ 김재성 ([조장](https://github.com/CuteIU))
 + 양동화
 + 이원탁
 + 한승진
