@@ -18,6 +18,7 @@
 + 김재성([조 장](https://github.com/CuteIU))
 + 양동화
 + 이원탁
++ 한승진
 - - -
 **99조 총원 3명**
 + 김경식 ([조장](https://github.com/XXXX))
