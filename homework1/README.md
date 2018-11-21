@@ -18,7 +18,7 @@
 + 채호열 ([조장](https://github.com/Cogdof))   
 + 이신홍
 + 최근용
-+
++ 권희수
 - - -  
 **99조 총원 3명**
 + 김경식 ([조장](https://github.com/XXXX))
