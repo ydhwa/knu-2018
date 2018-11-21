@@ -9,11 +9,17 @@
 **00-1조 총원 1명**
 + Robin Kim ([강사](https://github.com/napi0182))
 - - -
+**2조 총원 4명**
++ 김재성 ([조장](https://github.com/CuteIU))
++ 양동화
++ 이원탁
++ 한승진
+- - -
 **1조 총원 3명**
 + 배한글 ([조장](https://github.com/dxdiag20))   
 + 정우용
 + 신봉근
-- - -  
+- - - 
 **99조 총원 3명**
 + 김경식 ([조장](https://github.com/XXXX))
 + 최성환
