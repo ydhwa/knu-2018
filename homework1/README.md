@@ -27,7 +27,11 @@
 + 최근용
 + 권희수
 - - - 
+---
+** 8조총원 4명 **
++ 이주혁 ([조장](https://github.com/leejuhyeok))
 
+---
 **99조 총원 3명**
 + 김경식 ([조장](https://github.com/XXXX))
 + 최성환
