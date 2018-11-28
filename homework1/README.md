@@ -28,6 +28,10 @@
 + 권희수
 - - - 
 
+**5조 총원 3명**
++ 오신혁 ([조장](https://github.com/OhShinHyeok))
+- - -
+
 **99조 총원 3명**
 + 김경식 ([조장](https://github.com/XXXX))
 + 최성환
