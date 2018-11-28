@@ -1,4 +1,4 @@
-# homework week 
+﻿# homework week 
 
 ## 각 조는 하단에 아래와 같은 형식으로 조원의 구성원을 입력하세요. 조장의 github 주소도 가능하면 넣어놔주세요~
 - - -
@@ -8,6 +8,9 @@
 - - -
 **00-1조 총원 1명**
 + Robin Kim ([강사](https://github.com/napi0182))
+- - -
+**4조 총원 4명**
++ 이현수 ([조장]https://github.com/Halinee)
 - - - 
 **99조 총원 3명**
 + 김경식 ([조장](https://github.com/XXXX))
