@@ -31,6 +31,7 @@
 + 이주혁 ([조장](https://github.com/leejuhyeok))
 + 이수현
 + 이재빈
++ 김지우
 - - -
 **99조 총원 3명**
 + 김경식 ([조장](https://github.com/XXXX))
