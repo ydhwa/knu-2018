@@ -10,7 +10,7 @@
 + Robin Kim ([강사](https://github.com/napi0182))
 - - -
 **4조 총원 4명**
-+ 이현수 ([조장]https://github.com/Halinee)
++ 이현수 ([조장](https://github.com/Halinee))
 + 조성준
 - - - 
 **99조 총원 3명**
