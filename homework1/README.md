@@ -52,8 +52,11 @@
 - - -
 
 **7조 총원 4명**
++ 김혜지 ([조장](https://github.com/hengzizng))
++ 김상규
 + 전인준
 - - -
+
 **8조총원 4명**
 + 이주혁 ([조장](https://github.com/leejuhyeok))
 + 이수현
