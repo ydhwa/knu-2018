@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.sql.SQLException;
+
 /**
  * Created by rokim on 2018. 11. 16..
  */
@@ -33,7 +35,7 @@ public class BoardController {
     private final JdbcTemplateRepository jdbcTemplateRepository;
 
     @GetMapping("/detail")
-    public String getBoard(Model model, long nid) {
+    public String getBoard(Model model, long nid) throws SQLException {
         Board board = boardService.getBoard(nid);
 
         System.out.println(jdbcTemplateRepository.getTitleById(nid));
