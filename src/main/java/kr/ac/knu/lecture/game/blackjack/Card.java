@@ -2,6 +2,8 @@ package kr.ac.knu.lecture.game.blackjack;
 
 import kr.ac.knu.lecture.exception.NoSuchRankException;
 import lombok.Data;
+import lombok.Getter;
+import org.springframework.web.bind.annotation.GetMapping;
 
 /**
  * Created by rokim on 2018. 5. 26..

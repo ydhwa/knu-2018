@@ -43,6 +43,7 @@ public class BlackjackApiController {
     @PostMapping("/rooms/{roomId}/hit")
     public GameRoom hit(@AuthenticationPrincipal User user, @PathVariable String roomId) {
         User currentUser = userRepository.getOne(user.getName());
+
         return blackjackService.hit(roomId, currentUser);
     }
 
