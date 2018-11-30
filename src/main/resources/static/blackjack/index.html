@@ -448,12 +448,11 @@
         url: '/api/users/myself',
         contentType:'application/json;'
     }).done(function(data) {
-        console.log(data);
         if (data && data.name) {
             $('#login').hide();
             $('#lobby').show();
+            user = data;
         }
-        user = data;
     });
 
     $('#login_button').click(function() {
