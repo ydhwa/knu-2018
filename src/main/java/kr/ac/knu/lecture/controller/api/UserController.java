@@ -7,8 +7,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.security.Principal;
-
 /**
  * Created by rokim on 2018. 11. 30..
  */
@@ -17,8 +15,8 @@ import java.security.Principal;
 @Slf4j
 public class UserController {
     @GetMapping("/myself")
-    public Principal getMyself(@AuthenticationPrincipal Principal principal) {
-        log.info("{}", principal);
-        return principal;
+    public User getMyself(@AuthenticationPrincipal User user) {
+        log.info("{}", user);
+        return user;
     }
 }
