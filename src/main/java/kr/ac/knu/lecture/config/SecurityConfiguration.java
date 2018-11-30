@@ -6,6 +6,7 @@ package kr.ac.knu.lecture.config;
 
 import kr.ac.knu.lecture.domain.OAuthProvider;
 import kr.ac.knu.lecture.domain.User;
+import kr.ac.knu.lecture.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.security.oauth2.resource.PrincipalExtractor;
 import org.springframework.boot.autoconfigure.security.oauth2.resource.ResourceServerProperties;
@@ -27,6 +28,7 @@ import org.springframework.security.web.authentication.www.BasicAuthenticationFi
 
 import javax.servlet.Filter;
 import java.util.Map;
+import java.util.Optional;
 
 /**
  * Created by rokim on 2018. 11. 30..
@@ -43,12 +45,14 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .cors()
                 .and().csrf().disable()
                 .antMatcher("/**").authorizeRequests()
-                .antMatchers("/", "/view/**", "/login**", "/webjars/**", "/error**" ,"/blackjack/**")
+                .antMatchers("/", "/view/**", "/login**", "/webjars/**", "/error**" ,"/blackjack/**", "/h2-console/**")
                 .permitAll().anyRequest().authenticated()
                 .and()
                 .exceptionHandling().authenticationEntryPoint(new LoginUrlAuthenticationEntryPoint("/"))
                 .and()
                 .logout().logoutSuccessUrl("/").permitAll()
+                .and()
+                .headers().frameOptions().disable()
                 .and()
                 .addFilterBefore(ssoFilter(), BasicAuthenticationFilter.class);
     }
@@ -86,9 +90,21 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         return new ResourceServerProperties();
     }
 
+    @Autowired
+    private UserRepository userRepository;
+
     @Bean
     public PrincipalExtractor principalExtractor() {
-        return (map) -> new User((String) map.get("login"), OAuthProvider.GITHUB, String.valueOf(map.get("id")), 50000L);
+        return (map) -> {
+            String loginId = (String) map.get("login");
+            Optional<User> user = userRepository.findById(loginId);
+            if (user.isPresent()) {
+                return user.get();
+            }
+
+            User newUser = new User((String) map.get("login"), OAuthProvider.GITHUB, String.valueOf(map.get("id")), 50000L);;
+            return userRepository.save(newUser);
+        };
     }
 
 }

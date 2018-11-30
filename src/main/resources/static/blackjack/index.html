@@ -405,6 +405,10 @@
 </style>
 </head>
 <body>
+<div>
+    <div class="buttons"><div class="btn" id="logout_button">logout</div></div>
+</div>
+
 <div class="page" id="login">
     <div>
         <div class="buttons"><div class="btn" id="login_button">Login/Signup</div></div>
@@ -457,6 +461,10 @@
 
     $('#login_button').click(function() {
         location.href = '/login'
+    })
+
+    $('#logout_button').click(function() {
+        location.href = '/logout'
     })
 
     $('#create_room_button').click(function() {
