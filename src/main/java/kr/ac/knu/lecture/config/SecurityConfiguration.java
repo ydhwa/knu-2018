@@ -25,8 +25,11 @@ import org.springframework.security.oauth2.client.token.grant.code.Authorization
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableOAuth2Client;
 import org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
+import org.springframework.web.filter.CompositeFilter;
 
 import javax.servlet.Filter;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -58,15 +61,36 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     }
 
     private Filter ssoFilter() {
-        OAuth2ClientAuthenticationProcessingFilter githubFilter = new OAuth2ClientAuthenticationProcessingFilter("/login");
+        CompositeFilter compositeFilter = new CompositeFilter();
+        compositeFilter.setFilters(Arrays.asList(githubSsoFilter(), naverSsoFilter()));
+        return compositeFilter;
+    }
+
+    private Filter githubSsoFilter() {
+        OAuth2ClientAuthenticationProcessingFilter githubFilter = new OAuth2ClientAuthenticationProcessingFilter("/login/github");
         OAuth2RestTemplate githubTemplate = new OAuth2RestTemplate(github(), oauth2ClientContext);
         githubFilter.setRestTemplate(githubTemplate);
         UserInfoTokenServices tokenServices = new UserInfoTokenServices(githubResource().getUserInfoUri(), github().getClientId());
         tokenServices.setRestTemplate(githubTemplate);
-        tokenServices.setPrincipalExtractor(principalExtractor());
+        tokenServices.setPrincipalExtractor(githubPrincipalExtractor());
         githubFilter.setTokenServices(tokenServices);
         githubFilter.setAuthenticationSuccessHandler((httpServletRequest, httpServletResponse, authentication) -> httpServletResponse.sendRedirect("/blackjack/index.html"));
+
         return githubFilter;
+    }
+
+    private Filter naverSsoFilter() {
+        OAuth2ClientAuthenticationProcessingFilter naverFilter = new OAuth2ClientAuthenticationProcessingFilter("/login/naver");
+        OAuth2RestTemplate naverTemplate = new OAuth2RestTemplate(naver(), oauth2ClientContext);
+        naverFilter.setRestTemplate(naverTemplate);
+        UserInfoTokenServices tokenServices = new UserInfoTokenServices(naverResource().getUserInfoUri(), naver().getClientId());
+        tokenServices.setRestTemplate(naverTemplate);
+        tokenServices.setPrincipalExtractor(naverPrincipalExtractor());
+        naverFilter.setTokenServices(tokenServices);
+        naverFilter.setAuthenticationSuccessHandler((httpServletRequest, httpServletResponse, authentication) -> httpServletResponse.sendRedirect("/blackjack/index.html"));
+
+        return naverFilter;
+
     }
 
     @Bean
@@ -90,11 +114,22 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         return new ResourceServerProperties();
     }
 
+    @Bean
+    @ConfigurationProperties("naver.client")
+    public AuthorizationCodeResourceDetails naver() {
+        return new AuthorizationCodeResourceDetails();
+    }
+
+    @Bean
+    @ConfigurationProperties("naver.resource")
+    public ResourceServerProperties naverResource() {
+        return new ResourceServerProperties();
+    }
+
     @Autowired
     private UserRepository userRepository;
 
-    @Bean
-    public PrincipalExtractor principalExtractor() {
+    public PrincipalExtractor githubPrincipalExtractor() {
         return (map) -> {
             String loginId = (String) map.get("login");
             Optional<User> user = userRepository.findById(loginId);
@@ -103,6 +138,21 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
             }
 
             User newUser = new User((String) map.get("login"), OAuthProvider.GITHUB, String.valueOf(map.get("id")), 50000L);;
+            return userRepository.save(newUser);
+        };
+    }
+
+    private PrincipalExtractor naverPrincipalExtractor() {
+        return (map) -> {
+            Map<String, String> response = (Map<String, String>) map.get("response");
+            String name = response.get("name");
+            String id = response.get("id");
+            Optional<User> user = userRepository.findById(name);
+            if (user.isPresent()) {
+                return user.get();
+            }
+
+            User newUser = new User(name, OAuthProvider.NAVER, id, 60000L);
             return userRepository.save(newUser);
         };
     }
