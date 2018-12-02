@@ -13,8 +13,10 @@
 3. port 는 888 + 자신의 조 입니다 (1조는 8881, 2조는 8882)
 
 ## 주의
-1. <매우중요> application.yml 에 server.port 를 꼭 수정하세요. (다른 조와 충돌 안되게)
+1. <매우중요> application.yml 에 server.port 를 꼭 수정하세요. (다른 조와 충돌 안되게) -> 수정 안해도 됩니다. 
 2. root 의 README 를 보고 꼭! /etc/hosts 를 수정해주세요.
+3. webhook 주소의 마지막에 슬러시문자 (/) 를 꼭 넣어주세요.
+4. http://13.124.119.160:8080 에서 확인해볼 것 
 
 ## 문의
 1. rokim@riotgames.com 로 메일 주세요
