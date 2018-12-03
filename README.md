@@ -2,7 +2,7 @@
 
 ---
 ### week2
-* /etc/hosts 설정 추가하기 (windows 는 windows/system32/drivers/etc/hosts 파일 이었던 것으로 기억..)
+* /etc/hosts 설정 추가하기 (windows 는 windows/system32/drivers/etc/hosts 파일 이었던 것으로 기억...)
 
 ```
 127.0.0.1 local.robin.com

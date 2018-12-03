@@ -405,9 +405,14 @@
 </style>
 </head>
 <body>
+<div>
+    <div class="buttons"><div class="btn" id="logout_button">logout</div></div>
+</div>
+
 <div class="page" id="login">
     <div>
-        <div class="buttons"><div class="btn" id="login_button">Login/Signup</div></div>
+        <div class="buttons"><div class="btn" id="naver_login_button">Naver 로그인</div></div>
+        <div class="buttons"><div class="btn" id="github_login_button">Github 로그인</div></div>
     </div>
 </div>
 <div class="page" id="lobby" style="display: none">
@@ -455,8 +460,16 @@
         }
     });
 
-    $('#login_button').click(function() {
-        location.href = '/login'
+    $('#naver_login_button').click(function() {
+        location.href = '/login/naver'
+    })
+
+    $('#github_login_button').click(function() {
+        location.href = '/login/github'
+    })
+
+    $('#logout_button').click(function() {
+        location.href = '/logout'
     })
 
     $('#create_room_button').click(function() {
