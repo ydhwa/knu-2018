@@ -8,7 +8,7 @@
 3. push 이벤트를 발생시켜 deploy 가 되는 것을 확인.
 
 ## success or fail
-1. 숙제 마감은 11/29 00:00 까지 입니다.
+1. 숙제 마감은 12/07 00:00 까지 입니다.
 2. http://robin.com:888X/blackjack/index.html 에서 확인
 3. port 는 888 + 자신의 조 입니다 (1조는 8881, 2조는 8882)
 
