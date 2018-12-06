@@ -34,6 +34,10 @@
 2. Ace는 1과 11중 하나로 계산되어야 하는데 지금은 무조건 1 이네요
 3. Jack, Queen, King 은 모두 10으로 계산되어야 해요
 
+### 추가한 기능
+1. [API] Naver OAuth API가 local.robin.com:8882에서 정상적으로 동작하도록 수정(robin.com:8882는 동작하지 않음)
+2. [기능개선] Logout 버튼 로그인을 하기 전에는 보이지 않도록 하되, 로그인을 하고 있다면 Game 중에라도 계속 노출되도록 수정(CSS 수정 안함)
+
 ### Beautiful View
 1. FrontEnd 수업을 듣고 UI 좀 개선해주세요.
 
