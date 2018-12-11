@@ -43,8 +43,12 @@ public class Player {
         hand.drawCard();
     }
 
-    public void win() {
-        balance += currentBet * 2;
+    public void win(boolean isBlackjack) {
+        if(isBlackjack) {
+            balance += (double)currentBet * 1.5;
+        } else {
+            balance += currentBet * 2;
+        }
         currentBet = 0;
     }
 
@@ -53,7 +57,10 @@ public class Player {
         currentBet = 0;
     }
 
-    public void lost() {
+    public void lost(boolean isBlackjack) {
+        if(isBlackjack) {
+            balance += currentBet / 2;
+        }
         currentBet = 0;
     }
 
