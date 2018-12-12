@@ -1,6 +1,7 @@
 package kr.ac.knu.lecture.controller.api;
 
 import kr.ac.knu.lecture.domain.User;
+import kr.ac.knu.lecture.exception.NotEnoughBetMoneyException;
 import kr.ac.knu.lecture.game.blackjack.GameRoom;
 import kr.ac.knu.lecture.repository.UserRepository;
 import kr.ac.knu.lecture.service.BlackjackService;
@@ -38,6 +39,9 @@ public class BlackjackApiController {
     @PostMapping(value = "/rooms/{roomId}/bet", consumes = MediaType.APPLICATION_JSON_VALUE)
     public GameRoom bet(@AuthenticationPrincipal User user, @PathVariable String roomId, @RequestBody long betMoney) {
         User currentUser = userRepository.getOne(user.getName());
+        if(betMoney < 1000) {
+            throw new NotEnoughBetMoneyException();
+        }
         return blackjackService.bet(roomId, currentUser, betMoney);
     }
 

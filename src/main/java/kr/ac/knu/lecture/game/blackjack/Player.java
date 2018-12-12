@@ -19,17 +19,20 @@ public class Player {
     public Player(long seedMoney, Hand hand) {
         this.balance = seedMoney;
         this.hand = hand;
+        this.currentBet = 1000;
 
         isPlaying = false;
     }
 
     public void reset() {
         hand.reset();
+        this.currentBet = 1000;
         isPlaying = false;
     }
 
     public void placeBet(long bet) {
         if (balance < bet) {
+            // all-in
             throw new NotEnoughBalanceException();
         }
         balance -= bet;
@@ -45,7 +48,7 @@ public class Player {
 
     public void win(boolean isBlackjack) {
         if(isBlackjack) {
-            balance += (double)currentBet * 1.5;
+            balance += (double)currentBet * 2.5;
         } else {
             balance += currentBet * 2;
         }
@@ -59,7 +62,7 @@ public class Player {
 
     public void lost(boolean isBlackjack) {
         if(isBlackjack) {
-            balance += currentBet / 2;
+            balance -= (double)currentBet * 1.5;
         }
         currentBet = 0;
     }
