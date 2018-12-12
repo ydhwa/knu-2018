@@ -2,6 +2,7 @@ package kr.ac.knu.lecture.controller.api;
 
 import kr.ac.knu.lecture.domain.User;
 import kr.ac.knu.lecture.exception.NotEnoughBetMoneyException;
+import kr.ac.knu.lecture.exception.TooMuchBetMoneyException;
 import kr.ac.knu.lecture.game.blackjack.GameRoom;
 import kr.ac.knu.lecture.repository.UserRepository;
 import kr.ac.knu.lecture.service.BlackjackService;
@@ -41,6 +42,8 @@ public class BlackjackApiController {
         User currentUser = userRepository.getOne(user.getName());
         if(betMoney < 1000) {
             throw new NotEnoughBetMoneyException();
+        } else if(betMoney > 10000) {
+            throw new TooMuchBetMoneyException();
         }
         return blackjackService.bet(roomId, currentUser, betMoney);
     }
