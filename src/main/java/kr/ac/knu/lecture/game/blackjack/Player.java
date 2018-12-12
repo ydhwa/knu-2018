@@ -82,4 +82,10 @@ public class Player {
         this.isPlaying = false;
     }
 
+    public void doubleDownCard() {
+        balance -= currentBet;
+        currentBet *= 2;
+        hand.drawCard();
+        stand();
+    }
 }

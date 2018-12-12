@@ -1,6 +1,7 @@
 package kr.ac.knu.lecture.game.blackjack;
 
 import lombok.Getter;
+import org.springframework.security.core.parameters.P;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -70,10 +71,15 @@ public class GameRoom {
         player.stand();
     }
 
+    public void doubleDown(String name) {
+        Player player = playerList.get(name);
+
+        player.doubleDownCard();
+    }
+
     public void playDealer() {
         dealer.play();
         evaluator.evaluate();
         this.isFinished = true;
     }
-
 }
