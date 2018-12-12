@@ -27,9 +27,9 @@ public class Evaluator {
             boolean isPlayerBlackjack = (playerResult == 21) && (player.getHand().getCardList().size() == 2);
 
             if (playerResult > 21) {
-                player.lost(isDealerBlackjack);
+                player.lost(false);
             } else if (dealerResult > 21) {
-                player.win(isPlayerBlackjack);
+                player.win(false);
             } else if (playerResult > dealerResult) {
                 player.win(isPlayerBlackjack);
             } else if (playerResult == dealerResult) {
