@@ -547,6 +547,9 @@ height: 100px; width: 100%; background-color: #EEFFEE; opacity: 0.7;">
         if (money < bet) {
             bet = money;
         }
+        if(currentBet == 10000) {
+            bet = 0;
+        }
 
         $('#bet').html(currentBet + bet);
         $('#money').html(money - bet);
@@ -558,6 +561,9 @@ height: 100px; width: 100%; background-color: #EEFFEE; opacity: 0.7;">
         var money = parseInt($('#money').html());
         if (currentBet < bet) {
             bet = currentBet;
+        }
+        if(currentBet == 1000) {
+            bet = 0;
         }
 
         $('#bet').html(currentBet - bet);

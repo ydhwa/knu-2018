@@ -15,18 +15,18 @@ public class Player {
     private boolean isPlaying;
     @Getter
     private Hand hand;
+    final int DEFAULT_BET_MONEY = 1000;
 
     public Player(long seedMoney, Hand hand) {
-        this.balance = seedMoney;
+        this.balance = seedMoney - DEFAULT_BET_MONEY;
         this.hand = hand;
-        this.currentBet = 1000;
+        this.currentBet = DEFAULT_BET_MONEY;
 
         isPlaying = false;
     }
 
     public void reset() {
         hand.reset();
-        this.currentBet = 1000;
         isPlaying = false;
     }
 
@@ -35,8 +35,10 @@ public class Player {
             // all-in
             throw new NotEnoughBalanceException();
         }
-        balance -= bet;
-        currentBet = bet;
+        if(bet > DEFAULT_BET_MONEY) {
+            balance -= bet;
+            currentBet = bet;
+        }
 
         isPlaying = true;
     }
@@ -52,19 +54,24 @@ public class Player {
         } else {
             balance += currentBet * 2;
         }
-        currentBet = 0;
+        setBetMoney();
     }
 
     public void tie() {
         balance += currentBet;
-        currentBet = 0;
+        setBetMoney();
     }
 
     public void lost(boolean isBlackjack) {
         if(isBlackjack) {
             balance -= (double)currentBet * 1.5;
         }
-        currentBet = 0;
+        setBetMoney();
+    }
+
+    public void setBetMoney() {
+        balance -= DEFAULT_BET_MONEY;
+        currentBet = DEFAULT_BET_MONEY;
     }
 
     public Card hitCard() {
