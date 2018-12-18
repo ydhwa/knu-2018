@@ -8,6 +8,7 @@ import kr.ac.knu.lecture.domain.OAuthProvider;
 import kr.ac.knu.lecture.domain.User;
 import kr.ac.knu.lecture.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.security.oauth2.resource.AuthoritiesExtractor;
 import org.springframework.boot.autoconfigure.security.oauth2.resource.PrincipalExtractor;
 import org.springframework.boot.autoconfigure.security.oauth2.resource.ResourceServerProperties;
 import org.springframework.boot.autoconfigure.security.oauth2.resource.UserInfoTokenServices;
@@ -15,8 +16,11 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.oauth2.client.OAuth2ClientContext;
 import org.springframework.security.oauth2.client.OAuth2RestTemplate;
 import org.springframework.security.oauth2.client.filter.OAuth2ClientAuthenticationProcessingFilter;
@@ -28,10 +32,7 @@ import org.springframework.security.web.authentication.www.BasicAuthenticationFi
 import org.springframework.web.filter.CompositeFilter;
 
 import javax.servlet.Filter;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 /**
  * Created by rokim on 2018. 11. 30..
@@ -42,6 +43,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Autowired
     private OAuth2ClientContext oauth2ClientContext;
 
+    private String[] devIdArray = {"ydhwa_18"};
+
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
@@ -50,6 +53,12 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .antMatcher("/**").authorizeRequests()
                 .antMatchers("/", "/view/**", "/login**", "/webjars/**", "/error**" ,"/blackjack/**", "/h2-console/**")
                 .permitAll().anyRequest().authenticated()
+
+                /* 작동 제대로 안함
+                .antMatchers("/blackjack/devindex.html")
+                .hasAnyAuthority("ROLE_DEV")
+                */
+
                 .and()
                 .exceptionHandling().authenticationEntryPoint(new LoginUrlAuthenticationEntryPoint("/"))
                 .and()
@@ -86,6 +95,19 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         UserInfoTokenServices tokenServices = new UserInfoTokenServices(naverResource().getUserInfoUri(), naver().getClientId());
         tokenServices.setRestTemplate(naverTemplate);
         tokenServices.setPrincipalExtractor(naverPrincipalExtractor());
+
+        /* 작동 제대로 안함
+        AuthoritiesExtractor authorities = map -> {
+            for(String devId: devIdArray) {
+                if(devId.equals(naver().getClientId())) {
+                    return AuthorityUtils.createAuthorityList("ROLE_DEV");
+                }
+            }
+            return AuthorityUtils.createAuthorityList("ROLE_USER");
+        };
+        tokenServices.setAuthoritiesExtractor(authorities);
+        */
+
         naverFilter.setTokenServices(tokenServices);
         naverFilter.setAuthenticationSuccessHandler((httpServletRequest, httpServletResponse, authentication) -> httpServletResponse.sendRedirect("/blackjack/index.html"));
 
