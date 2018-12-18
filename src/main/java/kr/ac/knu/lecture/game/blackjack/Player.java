@@ -74,8 +74,11 @@ public class Player {
         currentBet = DEFAULT_BET_MONEY;
     }
 
-    public Card hitCard() {
-        return hand.drawCard();
+    public void hitCard() {
+        hand.drawCard();
+        if(hand.getCardSum() > 21) {
+            stand();
+        }
     }
 
     public void stand() {

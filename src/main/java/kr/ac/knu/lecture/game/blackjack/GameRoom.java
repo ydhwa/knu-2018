@@ -1,5 +1,6 @@
 package kr.ac.knu.lecture.game.blackjack;
 
+import kr.ac.knu.lecture.exception.AlreadyOver21Exception;
 import lombok.Getter;
 import org.springframework.security.core.parameters.P;
 
@@ -59,10 +60,13 @@ public class GameRoom {
         playerList.forEach((s, player) -> player.deal());
     }
 
-    public Card hit(String name) {
+    public void hit(String name) {
         Player player = playerList.get(name);
+        player.hitCard();
 
-        return player.hitCard();
+        if(player.getHand().getCardSum() > 21) {
+            throw new AlreadyOver21Exception();
+        }
     }
 
     public void stand(String name) {

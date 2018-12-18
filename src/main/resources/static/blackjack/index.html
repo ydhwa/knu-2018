@@ -387,6 +387,10 @@
         color: green;
         font-size: 21px;
     }
+
+    .my-info {
+        font-size: 20px;
+    }
 </style>
 </head>
 <body>
@@ -425,6 +429,16 @@ height: 100px; width: 100%; background-color: #EEFFEE; opacity: 0.7;">
     </div>
 </div>
 <div class="page" id="game" style="display: none">
+    <table class="my-info" border="0">
+        <tr>
+            <th>Name</th>
+            <td id="my-name"></td>
+        </tr>
+        <tr>
+            <th>Balance</th>
+            <td id="my-balance"></td>
+        </tr>
+    </table>
     <div class="dealer-cards"></div>
     <div class="clear"></div>
     <div class="player-cards"></div>
@@ -529,6 +543,7 @@ height: 100px; width: 100%; background-color: #EEFFEE; opacity: 0.7;">
             url: '/api/black-jack/rooms/' + gameRoomId + '/hit',
         }).done(function (data) {
             drawGameRoom(data);
+            $('#double_down').hide();
         });
     })
 
@@ -547,8 +562,8 @@ height: 100px; width: 100%; background-color: #EEFFEE; opacity: 0.7;">
             url: '/api/black-jack/rooms/' + gameRoomId + '/double-down',
         }).done(function (data) {
             drawGameRoom(data);
+            $('#double_down').hide();
         });
-        $('#double_down').hide();
     })
 
     $('#more').click(function () {
@@ -624,6 +639,9 @@ height: 100px; width: 100%; background-color: #EEFFEE; opacity: 0.7;">
 
         $('#bet').html(gameRoom.playerList[user.name].currentBet);
         $('#money').html(gameRoom.playerList[user.name].balance);
+
+        $('#my-name').html(user.name);
+        $('#my-balance').html(gameRoom.playerList[user.name].balance + gameRoom.playerList[user.name].currentBet);
     }
 
     function generateCardDiv(rank, suit) {

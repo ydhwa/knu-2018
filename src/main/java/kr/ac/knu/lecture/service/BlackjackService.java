@@ -1,6 +1,7 @@
 package kr.ac.knu.lecture.service;
 
 import kr.ac.knu.lecture.domain.User;
+import kr.ac.knu.lecture.exception.AlreadyOver21Exception;
 import kr.ac.knu.lecture.game.blackjack.Deck;
 import kr.ac.knu.lecture.game.blackjack.Evaluator;
 import kr.ac.knu.lecture.game.blackjack.GameRoom;
@@ -59,10 +60,14 @@ public class BlackjackService {
     public GameRoom hit(String roomId, User user) {
         GameRoom gameRoom = gameRoomMap.get(roomId);
 
-        gameRoom.hit(user.getName());
-
-        updateGameResult(gameRoom);
-        return gameRoom;
+        try {
+            gameRoom.hit(user.getName());
+        } catch(AlreadyOver21Exception e) {
+            gameRoom.playDealer();
+        } finally {
+            updateGameResult(gameRoom);
+            return gameRoom;
+        }
     }
 
     public GameRoom stand(String roomId, User user) {
