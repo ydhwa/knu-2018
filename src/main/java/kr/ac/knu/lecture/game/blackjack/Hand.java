@@ -50,7 +50,8 @@ public class Hand {
 
         return cardSum;
     }
-    public int getBestSum(int[] cardSums) {
+
+    private int getBestSum(int[] cardSums) {
         int smallerCase = cardSums[0];
         int largerCase = cardSums[1];
 
