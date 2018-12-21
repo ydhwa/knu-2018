@@ -489,6 +489,7 @@ height: 200px; width: 150px; background-color: #ababab; opacity: 0.5;">
         contentType: 'application/json;'
     }).done(function (data) {
         userList = data;
+        userList.reverse();
         userList.forEach(function (userListItem) {
             $('#ranking').append('<tr><td>' + userListItem.name + '</td><td>' + userListItem.account + '</td></tr>');
         });
