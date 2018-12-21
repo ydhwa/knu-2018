@@ -1,6 +1,8 @@
 package kr.ac.knu.lecture.game.blackjack;
 
+import kr.ac.knu.lecture.exception.AlreadyOver21Exception;
 import lombok.Getter;
+import org.springframework.security.core.parameters.P;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -58,10 +60,13 @@ public class GameRoom {
         playerList.forEach((s, player) -> player.deal());
     }
 
-    public Card hit(String name) {
+    public void hit(String name) {
         Player player = playerList.get(name);
+        player.hitCard();
 
-        return player.hitCard();
+        if(player.getHand().getCardSum() > 21) {
+            throw new AlreadyOver21Exception();
+        }
     }
 
     public void stand(String name) {
@@ -70,10 +75,15 @@ public class GameRoom {
         player.stand();
     }
 
+    public void doubleDown(String name) {
+        Player player = playerList.get(name);
+
+        player.doubleDownCard();
+    }
+
     public void playDealer() {
         dealer.play();
         evaluator.evaluate();
         this.isFinished = true;
     }
-
 }

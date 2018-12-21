@@ -394,11 +394,27 @@
 </style>
 </head>
 <body>
+
+<div style="position: fixed; top: 0; left: 0;
+height: 100px; width: 100%; background-color: #EEFFEE; opacity: 0.7;">
+    <input type="text" size="2" id="nextCardInput" />
+    <div id="nextCards">
+    </div>
+</div>
+
+<div style="position: fixed; top: 100px; left: 0;
+height: 200px; width: 150px; background-color: #ababab; opacity: 0.5;">
+    <table id="ranking" border="1" style="border-collapse: collapse;">
+        <tr><th colspan="2">Ranking</th></tr>
+        <tr><th>Name</th><th>Account</th></tr>
+    </table>
+</div>
+
 <div class="page" id="login">
-    <div>
-        <div class="buttons">
+    <div class="buttons">
         <div class="btn" id="logout_button">logout</div>
-        </div>
+    </div>
+    <div>
         <div class="buttons">
             <div class="btn" id="naver_login_button">Naver 로그인</div>
         </div>
@@ -414,9 +430,7 @@
         </div>
     </div>
 </div>
-<div class="page" id="game" style="display: none">  
-    <div style="position: fixed; top: 0; left: 0;
-    height: 100px; width: 150px; background-color: #BEF781; opacity: 0.5;">
+<div class="page" id="game" style="display: none">
     <table class="my-info" border="0">
         <tr>
             <th>Name</th>
@@ -424,23 +438,9 @@
         </tr>
         <tr>
             <th>Account</th>
-            <th>
-            <span id="money" class="money"></span>
-            <div class="clear"></div>
-            </th>
+            <td id="my-account"></td>
         </tr>
     </table>
-</div>
-<div style="position: fixed; top: 100px; left: 0;
-height: 200px; width: 150px; background-color: #ababab; opacity: 0.5;">
-    <center>
-    <table id="ranking" border="1" style="border-collapse: collapse;">
-        <tr>
-            <th colspan="2">Ranking</th>
-        </tr>
-    </table>
-    </center>
-</div>
     <div class="dealer-cards"></div>
     <div class="clear"></div>
 
@@ -460,6 +460,11 @@ height: 200px; width: 150px; background-color: #ababab; opacity: 0.5;">
             <div class="btn" id="more">+</div>
             <div class="btn" id="less">-</div>
         </div>
+        <div class="clear"></div>
+    </div>
+    <div>
+        <b>Available Funds</b><br>
+        <span id="money" class="money"></span>
         <div class="clear"></div>
     </div>
 </div>
@@ -526,6 +531,21 @@ height: 200px; width: 150px; background-color: #ababab; opacity: 0.5;">
             type: 'POST',
             url: '/api/black-jack/rooms/' + gameRoomId + '/bet',
             data: JSON.stringify(bet),
+            contentType: 'application/json;',
+        }).done(function (data) {
+            drawGameRoom(data);
+        });
+    })
+
+    $('#nextCardInput').keypress(function(event) {
+        if (event.which != 13) {
+            return;
+        }
+
+        $.ajax({
+            type: 'PUT',
+            url: '/api/black-jack/rooms/' + gameRoomId + '/deck/cards',
+            data: JSON.stringify(event.target.value),
             contentType: 'application/json;',
         }).done(function (data) {
             drawGameRoom(data);
@@ -608,6 +628,11 @@ height: 200px; width: 150px; background-color: #ababab; opacity: 0.5;">
             $('#double_down').show();
         }
 
+        $('#nextCards').html("");
+        gameRoom.deck.cardList.forEach(function(card) {
+            $('#nextCards').append(card.rank + ", ");
+        })
+
         $('.dealer-cards').html("");
         gameRoom.dealer.hand.cardList.forEach(function (card) {
             $('.dealer-cards').append(generateCardDiv(card.rank, card.suit));
@@ -631,6 +656,7 @@ height: 200px; width: 150px; background-color: #ababab; opacity: 0.5;">
         $('#money').html(gameRoom.playerList[user.name].balance);
 
         $('#my-name').html(user.name);
+        $('#my-account').html(user.account);
     }
 
     function generateCardDiv(rank, suit) {
@@ -681,4 +707,5 @@ height: 200px; width: 150px; background-color: #ababab; opacity: 0.5;">
         return "<div class='card " + className + "' data-value='" + rank + "'></div>";
     }
 </script>
+
 </html>

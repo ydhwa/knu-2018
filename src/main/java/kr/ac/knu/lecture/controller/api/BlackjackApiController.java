@@ -1,6 +1,8 @@
 package kr.ac.knu.lecture.controller.api;
 
 import kr.ac.knu.lecture.domain.User;
+import kr.ac.knu.lecture.exception.NotEnoughBetMoneyException;
+import kr.ac.knu.lecture.exception.TooMuchBetMoneyException;
 import kr.ac.knu.lecture.game.blackjack.GameRoom;
 import kr.ac.knu.lecture.repository.UserRepository;
 import kr.ac.knu.lecture.service.BlackjackService;
@@ -15,6 +17,8 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
 
 /**
  * Created by rokim on 2018. 5. 21..
@@ -38,13 +42,17 @@ public class BlackjackApiController {
     @PostMapping(value = "/rooms/{roomId}/bet", consumes = MediaType.APPLICATION_JSON_VALUE)
     public GameRoom bet(@AuthenticationPrincipal User user, @PathVariable String roomId, @RequestBody long betMoney) {
         User currentUser = userRepository.getOne(user.getName());
+        if(betMoney < 1000) {
+            throw new NotEnoughBetMoneyException();
+        } else if(betMoney > 10000) {
+            throw new TooMuchBetMoneyException();
+        }
         return blackjackService.bet(roomId, currentUser, betMoney);
     }
 
     @PostMapping("/rooms/{roomId}/hit")
     public GameRoom hit(@AuthenticationPrincipal User user, @PathVariable String roomId) {
         User currentUser = userRepository.getOne(user.getName());
-
         return blackjackService.hit(roomId, currentUser);
     }
 
@@ -52,6 +60,12 @@ public class BlackjackApiController {
     public GameRoom stand(@AuthenticationPrincipal User user, @PathVariable String roomId) {
         User currentUser = userRepository.getOne(user.getName());
         return blackjackService.stand(roomId, currentUser);
+    }
+
+    @PostMapping("/rooms/{roomId}/double-down")
+    public GameRoom doubleDown(@AuthenticationPrincipal User user, @PathVariable String roomId) {
+        User currentUser = userRepository.getOne(user.getName());
+        return blackjackService.doubleDown(roomId, currentUser);
     }
 
     @PutMapping("/rooms/{roomId}/deck/cards")

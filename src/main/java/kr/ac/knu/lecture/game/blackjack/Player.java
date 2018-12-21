@@ -15,10 +15,12 @@ public class Player {
     private boolean isPlaying;
     @Getter
     private Hand hand;
+    final int DEFAULT_BET_MONEY = 1000;
 
     public Player(long seedMoney, Hand hand) {
-        this.balance = seedMoney;
+        this.balance = seedMoney - DEFAULT_BET_MONEY;
         this.hand = hand;
+        this.currentBet = DEFAULT_BET_MONEY;
 
         isPlaying = false;
     }
@@ -30,10 +32,13 @@ public class Player {
 
     public void placeBet(long bet) {
         if (balance < bet) {
+            // all-in
             throw new NotEnoughBalanceException();
         }
-        balance -= bet;
-        currentBet = bet;
+        if(bet > DEFAULT_BET_MONEY) {
+            balance -= bet;
+            currentBet = bet;
+        }
 
         isPlaying = true;
     }
@@ -43,26 +48,47 @@ public class Player {
         hand.drawCard();
     }
 
-    public void win() {
-        balance += currentBet * 2;
-        currentBet = 0;
+    public void win(boolean isBlackjack) {
+        if(isBlackjack) {
+            balance += (double)currentBet * 2.5;
+        } else {
+            balance += currentBet * 2;
+        }
+        setBetMoney();
     }
 
     public void tie() {
         balance += currentBet;
-        currentBet = 0;
+        setBetMoney();
     }
 
-    public void lost() {
-        currentBet = 0;
+    public void lost(boolean isBlackjack) {
+        if(isBlackjack) {
+            balance -= (double)currentBet * 1.5;
+        }
+        setBetMoney();
     }
 
-    public Card hitCard() {
-        return hand.drawCard();
+    public void setBetMoney() {
+        balance -= DEFAULT_BET_MONEY;
+        currentBet = DEFAULT_BET_MONEY;
+    }
+
+    public void hitCard() {
+        hand.drawCard();
+        if(hand.getCardSum() > 21) {
+            stand();
+        }
     }
 
     public void stand() {
         this.isPlaying = false;
     }
 
+    public void doubleDownCard() {
+        balance -= currentBet;
+        currentBet *= 2;
+        hand.drawCard();
+        stand();
+    }
 }

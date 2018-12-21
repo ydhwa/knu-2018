@@ -1,6 +1,7 @@
 package kr.ac.knu.lecture.service;
 
 import kr.ac.knu.lecture.domain.User;
+import kr.ac.knu.lecture.exception.AlreadyOver21Exception;
 import kr.ac.knu.lecture.game.blackjack.Deck;
 import kr.ac.knu.lecture.game.blackjack.Evaluator;
 import kr.ac.knu.lecture.game.blackjack.GameRoom;
@@ -8,9 +9,7 @@ import kr.ac.knu.lecture.repository.UserRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 /**
  * Created by rokim on 2018. 11. 30..
@@ -59,16 +58,30 @@ public class BlackjackService {
     public GameRoom hit(String roomId, User user) {
         GameRoom gameRoom = gameRoomMap.get(roomId);
 
-        gameRoom.hit(user.getName());
-
-        updateGameResult(gameRoom);
-        return gameRoom;
+        try {
+            gameRoom.hit(user.getName());
+        } catch(AlreadyOver21Exception e) {
+            gameRoom.playDealer();
+        } finally {
+            updateGameResult(gameRoom);
+            return gameRoom;
+        }
     }
 
     public GameRoom stand(String roomId, User user) {
         GameRoom gameRoom = gameRoomMap.get(roomId);
 
         gameRoom.stand(user.getName());
+        gameRoom.playDealer();
+
+        updateGameResult(gameRoom);
+        return gameRoom;
+    }
+
+    public GameRoom doubleDown(String roomId, User user) {
+        GameRoom gameRoom = gameRoomMap.get(roomId);
+
+        gameRoom.doubleDown(user.getName());
         gameRoom.playDealer();
 
         updateGameResult(gameRoom);
@@ -86,6 +99,7 @@ public class BlackjackService {
         }
     }
 
+    // backdoor
     public GameRoom addNextCard(String roomId, int rank) {
         GameRoom gameRoom = gameRoomMap.get(roomId);
         Deck deck = gameRoom.getDeck();
