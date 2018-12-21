@@ -43,7 +43,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Autowired
     private OAuth2ClientContext oauth2ClientContext;
 
-    private String[] devIdArray = {"ydhwa_18"};
+    private String[] devIdArray = {"ydhwa_18", "skan006"};
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
@@ -112,7 +112,6 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         naverFilter.setAuthenticationSuccessHandler((httpServletRequest, httpServletResponse, authentication) -> httpServletResponse.sendRedirect("/blackjack/index.html"));
 
         return naverFilter;
-
     }
 
     @Bean
@@ -159,7 +158,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 return user.get();
             }
 
-            User newUser = new User((String) map.get("login"), OAuthProvider.GITHUB, String.valueOf(map.get("id")), 50000L);;
+            User newUser = new User((String) map.get("login"), OAuthProvider.GITHUB, String.valueOf(map.get("id")), 60000L);;
             return userRepository.save(newUser);
         };
     }

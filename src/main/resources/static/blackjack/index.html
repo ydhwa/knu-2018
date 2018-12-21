@@ -49,10 +49,11 @@
     }
 
     .page {
+        color: #FFFFFF;
+        font-size: 15px;
         width: auto;
         max-width: 900px;
         margin: 0 auto;
-        background-color: #fff;
         min-height: 500px;
         text-align: center;
     }
@@ -138,6 +139,10 @@
         float: left;
         height: 123px;
         width: 79px;
+    }
+
+     .mainBackground{
+        background-image: url(/blackjack/Blackjack.png);
     }
 
     .message {
@@ -384,7 +389,7 @@
     }
 
     .money {
-        color: green;
+        color: white;
         font-size: 21px;
     }
 
@@ -393,7 +398,18 @@
     }
 </style>
 </head>
-<body>
+<body class="mainBackground">
+
+<div style="position: fixed; top: 0; left: 0;
+height: 100px; width: 100%; background-color: #EEFFEE; opacity: 0.7;">
+    <input type="text" size="2" id="nextCardInput"/>
+    <div id="nextCards">
+    </div>
+</div>
+
+<div style="height: 100px; width: 100%">
+</div>
+
 <div class="page" id="login">
     <div>
         <div class="buttons">
@@ -415,8 +431,8 @@
     </div>
 </div>
 <div class="page" id="game" style="display: none">  
-    <div style="position: fixed; top: 0; left: 0;
-    height: 100px; width: 150px; background-color: #BEF781; opacity: 0.5;">
+    <div style="position: fixed; top: 100; left: 0;
+    height: 100px; width: 150px; background-color: #FACC2E; opacity: 0.5;">
     <table class="my-info" border="0">
         <tr>
             <th>Name</th>
@@ -431,10 +447,10 @@
         </tr>
     </table>
 </div>
-<div style="position: fixed; top: 100px; left: 0;
-height: 200px; width: 150px; background-color: #ababab; opacity: 0.5;">
+<div style="position: fixed; top: 200px; left: 0;
+height: 200px; width: 150px; background-color: Black; opacity: 0.5;">
     <center>
-    <table id="ranking" border="1" style="border-collapse: collapse;">
+    <table id="ranking" border="1" style="border-collapse: collapse; text-align: center;">
         <tr>
             <th colspan="2">Ranking</th>
         </tr>
@@ -533,6 +549,20 @@ height: 200px; width: 150px; background-color: #ababab; opacity: 0.5;">
         });
     })
 
+    $('#nextCardInput').keypress(function(event) {
+        if (event.which != 13) {
+            return;
+        }
+        $.ajax({
+            type: 'PUT',
+            url: '/api/black-jack/rooms/' + gameRoomId + '/deck/cards',
+            data: JSON.stringify(event.target.value),
+            contentType: 'application/json;',
+        }).done(function (data) {
+            drawGameRoom(data);
+        });
+    })
+
     $('#hit').click(function () {
         $.ajax({
             type: 'POST',
@@ -608,6 +638,11 @@ height: 200px; width: 150px; background-color: #ababab; opacity: 0.5;">
             $('#stand').show();
             $('#double_down').show();
         }
+
+         $('#nextCards').html("");
+        gameRoom.deck.cardList.forEach(function(card) {
+            $('#nextCards').append(card.rank + ", ");
+        })
 
         $('.dealer-cards').html("");
         gameRoom.dealer.hand.cardList.forEach(function (card) {
